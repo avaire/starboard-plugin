@@ -1,0 +1,3 @@
+name: 'Starboard'
+main: 'com.avairebot.starboard.Starboard'
+description: 'Adds a starboard command to Ava, allowing servers to define a starboard channel'

@@ -1,0 +1,18 @@
+apply plugin: 'java'
+
+group 'com.avairebot'
+version '1.0-SNAPSHOT'
+description 'Adds a starboard command to Ava, allowing servers to define a starboard channel'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    //
+}
+
+dependencies {
+    // Due to jitpack not wanting to compile the sources from github,
+    // we're using the raw Jar file instead.
+    compileOnly files('./../avaire/AvaIre.jar')
+}
