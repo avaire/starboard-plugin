@@ -81,7 +81,7 @@ public class EmoteEventListener extends EventListener {
             int emoteCount = getEmoteCount(reaction);
 
             EmbedBuilder embedBuilder = MessageFactory.createEmbeddedBuilder()
-                    .setColor(this.starboard.getColor((float) emoteCount / 13))
+                    .setColor(starboard.getColor((float) emoteCount / 13))
                     .setTimestamp(message.getCreationTime())
                     .setAuthor(message.getAuthor().getName(), null, message.getAuthor().getEffectiveAvatarUrl())
                     .setDescription(message.getContentRaw());
@@ -97,7 +97,7 @@ public class EmoteEventListener extends EventListener {
 
             Message build = (new MessageBuilder())
                     .setContent(String.format("%s **%s** %s ID: %s",
-                            this.starboard.getStarEmote(emoteCount),
+                            starboard.getStarEmote(emoteCount),
                             emoteCount,
                             message.getTextChannel().getAsMention(),
                             message.getId()

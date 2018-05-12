@@ -1,6 +1,5 @@
 package com.avairebot.starboard;
 
-import com.avairebot.Constants;
 import com.avairebot.commands.Category;
 import com.avairebot.commands.CategoryHandler;
 import com.avairebot.commands.CommandMessage;
@@ -10,7 +9,6 @@ import com.avairebot.utilities.MentionableUtil;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.TextChannel;
 
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -91,7 +89,7 @@ public class StarboardCommand extends Command {
         }
 
         if (ComparatorUtil.isFuzzyFalse(args[0])) {
-            if (updateStarboardDatabaseValue(context.getGuild().getId(), null)) {
+            if (starboard.updateStarboardDatabaseValue(context.getGuild().getId(), null)) {
                 context.makeSuccess("The starboard channel has been disabled successfully.")
                         .queue();
 
@@ -106,7 +104,7 @@ public class StarboardCommand extends Command {
             return sendErrorMessage(context, "Invalid channel mentioned, you just mention or name a valid text channel.");
         }
 
-        if (!updateStarboardDatabaseValue(context.getGuild().getId(), channel.getId())) {
+        if (!starboard.updateStarboardDatabaseValue(context.getGuild().getId(), channel.getId())) {
             return sendErrorMessage(context, "Failed to update the starboard value for the server, please try again later.");
         }
 
@@ -123,20 +121,5 @@ public class StarboardCommand extends Command {
                 .queue();
 
         return true;
-    }
-
-    private boolean updateStarboardDatabaseValue(String guildId, String value) {
-        try {
-            avaire.getDatabase().newQueryBuilder(Constants.GUILD_TABLE_NAME)
-                    .where("id", guildId)
-                    .update(statement -> {
-                        statement.set("starboard", value);
-                    });
-
-            return true;
-        } catch (SQLException e) {
-            Starboard.LOGGER.error("Failed to update the starboard value for: " + guildId, e);
-        }
-        return false;
     }
 }

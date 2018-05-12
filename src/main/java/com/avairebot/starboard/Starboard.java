@@ -8,11 +8,15 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Starboard extends JavaPlugin {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(Starboard.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(Starboard.class);
     static final String STARBOARD_TABLE = "starboard";
+
+    private final Map<String, String> starboardCache = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -46,6 +50,10 @@ public class Starboard extends JavaPlugin {
     }
 
     String getStarboardValueFromGuild(String guildId) {
+        if (starboardCache.containsKey(guildId)) {
+            return starboardCache.get(guildId);
+        }
+
         try {
             DataRow first = getAvaire().getDatabase().newQueryBuilder(Constants.GUILD_TABLE_NAME)
                     .select("starboard")
@@ -53,10 +61,30 @@ public class Starboard extends JavaPlugin {
                     .get()
                     .first();
 
-            return first.getString("starboard", null);
+            String value = first.getString("starboard", null);
+            starboardCache.put(guildId, value);
+
+            return value;
         } catch (SQLException e) {
             LOGGER.error("Failed to fetch the guild starboard value from the database for: " + guildId, e);
         }
         return null;
+    }
+
+    boolean updateStarboardDatabaseValue(String guildId, String value) {
+        try {
+            getDatabase().newQueryBuilder(Constants.GUILD_TABLE_NAME)
+                    .where("id", guildId)
+                    .update(statement -> {
+                        statement.set("starboard", value);
+                    });
+
+            starboardCache.put(guildId, value);
+
+            return true;
+        } catch (SQLException e) {
+            Starboard.LOGGER.error("Failed to update the starboard value for: " + guildId, e);
+        }
+        return false;
     }
 }
