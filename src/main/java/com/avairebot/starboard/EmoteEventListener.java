@@ -3,6 +3,7 @@ package com.avairebot.starboard;
 import com.avairebot.contracts.handlers.EventListener;
 import com.avairebot.database.collection.DataRow;
 import com.avairebot.factories.MessageFactory;
+import com.avairebot.utilities.RestActionUtil;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Member;
@@ -126,7 +127,7 @@ public class EmoteEventListener extends EventListener {
             } catch (SQLException e) {
                 LOGGER.error("Failed to fetch the starboard message ID from the database: " + messageId, e);
             }
-        });
+        }, RestActionUtil.IGNORE);
     }
 
     private void createNewRecord(Message message, long originalId) {
