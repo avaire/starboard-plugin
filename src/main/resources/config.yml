@@ -1,0 +1,26 @@
+
+#--------------------------------------------------------------------------
+# Welcome to the AvaIre Starboard Plugin Configuration
+#--------------------------------------------------------------------------
+#
+# Below you'll find all the configurable options for plugin.
+#
+# The configuration is written in a format known as YAML, you can learn
+# more about the format at https://learnxinyminutes.com/docs/yaml
+#
+# Need to validate if the config has no errors and will pass Avas config
+# management system? Try out https://codebeautify.org/yaml-validator
+#
+# Got any questions? Contact the development team on the official support
+# server for Ava at https://avairebot.com/support
+#
+
+# This is the number of star reactions that must be added to a message before
+# it will be recognized as a starboard message.
+#
+reaction-requirement: 3
+
+# Determines if starboard messages should be ignored if the author of the
+# message adds or removes a reaction to their own message.
+#
+ignore-own-messages: false

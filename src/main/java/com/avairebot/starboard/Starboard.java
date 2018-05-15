@@ -20,9 +20,20 @@ public class Starboard extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+        reloadConfig();
+
         registerCommand(new StarboardCommand(this));
         registerEventListener(new EmoteEventListener(this));
         registerMigration(new SetupStarboardTableAndFieldMigration());
+    }
+
+    int getReactionRequirement() {
+        return getConfig().getInt("reaction-requirement", 3);
+    }
+
+    boolean getIgnoreOwnMessages() {
+        return getConfig().getBoolean("ignore-own-messages", false);
     }
 
     Color getColor(float percentage) {
@@ -60,6 +71,10 @@ public class Starboard extends JavaPlugin {
                     .where("id", guildId)
                     .get()
                     .first();
+
+            if (first == null) {
+                return null;
+            }
 
             String value = first.getString("starboard", null);
             starboardCache.put(guildId, value);

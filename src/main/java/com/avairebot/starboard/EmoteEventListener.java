@@ -33,7 +33,7 @@ public class EmoteEventListener extends EventListener {
         if (!event.getReactionEmote().getName().equals("\u2B50")) {
             return;
         }
-        handleStarEvent(event.getReaction(), event.getMember(), event.getMessageIdLong());
+        handleStarEvent(event.getReaction(), event.getMember(), event.getMessageIdLong(), true);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class EmoteEventListener extends EventListener {
         if (!event.getReactionEmote().getName().equals("\u2B50")) {
             return;
         }
-        handleStarEvent(event.getReaction(), event.getMember(), event.getMessageIdLong());
+        handleStarEvent(event.getReaction(), event.getMember(), event.getMessageIdLong(), false);
     }
 
     private int getEmoteCount(MessageReaction reaction) {
@@ -61,7 +61,7 @@ public class EmoteEventListener extends EventListener {
         return null;
     }
 
-    private void handleStarEvent(MessageReaction messageReaction, Member member, long messageId) {
+    private void handleStarEvent(MessageReaction messageReaction, Member member, long messageId, boolean isAdd) {
         String starboardChannelId = starboard.getStarboardValueFromGuild(messageReaction.getGuild().getId());
         if (starboardChannelId == null || starboardChannelId.trim().length() == 0) {
             return;
@@ -74,12 +74,15 @@ public class EmoteEventListener extends EventListener {
         }
 
         messageReaction.getTextChannel().getMessageById(messageId).queue(message -> {
-            if (message.getAuthor().getIdLong() == member.getUser().getIdLong()) {
+            if (starboard.getIgnoreOwnMessages() && message.getAuthor().getIdLong() == member.getUser().getIdLong()) {
                 return;
             }
 
             MessageReaction reaction = getReactionFromList(message.getReactions());
             int emoteCount = getEmoteCount(reaction);
+            if (isAdd && emoteCount < starboard.getReactionRequirement()) {
+                return;
+            }
 
             EmbedBuilder embedBuilder = MessageFactory.createEmbeddedBuilder()
                     .setColor(starboard.getColor((float) emoteCount / 13))
@@ -107,22 +110,27 @@ public class EmoteEventListener extends EventListener {
                     .build();
 
             try {
-                DataRow row = starboard.getAvaire().getDatabase()
+                DataRow row = starboard.getDatabase()
                         .newQueryBuilder(Starboard.STARBOARD_TABLE)
                         .where("original_id", messageId)
                         .get()
                         .first();
 
                 if (row == null) {
+                    if (emoteCount < starboard.getReactionRequirement()) {
+                        return;
+                    }
                     starboardChannel.sendMessage(build).queue(consumer -> createNewRecord(consumer, messageId));
                 } else {
                     starboardChannel.getMessageById(row.getString("message_id")).queue(starMessage -> {
-                        if (emoteCount == 0) {
-                            starMessage.delete().queue();
+                        if (emoteCount < starboard.getReactionRequirement()) {
+                            starMessage.delete().queue(aVoid -> deleteMessageRecord(messageId));
+
+                            deleteMessageRecord(messageId);
                         } else {
                             starMessage.editMessage(build).queue();
                         }
-                    });
+                    }, err -> deleteMessageRecord(messageId));
                 }
             } catch (SQLException e) {
                 LOGGER.error("Failed to fetch the starboard message ID from the database: " + messageId, e);
@@ -140,6 +148,17 @@ public class EmoteEventListener extends EventListener {
                     });
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void deleteMessageRecord(long originalId) {
+        try {
+            starboard.getDatabase()
+                    .newQueryBuilder(Starboard.STARBOARD_TABLE)
+                    .where("original_id", originalId)
+                    .delete();
+        } catch (SQLException e) {
+            LOGGER.error("Failed to fetch the starboard message ID from the database: " + originalId, e);
         }
     }
 }
