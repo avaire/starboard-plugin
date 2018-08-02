@@ -3,6 +3,11 @@ package com.avairebot.starboard;
 import com.avairebot.Constants;
 import com.avairebot.database.collection.DataRow;
 import com.avairebot.plugin.JavaPlugin;
+import com.avairebot.scheduler.ScheduleHandler;
+import com.avairebot.starboard.command.StarboardCommand;
+import com.avairebot.starboard.handlers.EmoteEventListener;
+import com.avairebot.starboard.job.UpdateStarJob;
+import com.avairebot.starboard.migrations.SetupStarboardTableAndFieldMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +18,8 @@ import java.util.Map;
 
 public class Starboard extends JavaPlugin {
 
-    static final Logger LOGGER = LoggerFactory.getLogger(Starboard.class);
-    static final String STARBOARD_TABLE = "starboard";
+    public static final Logger LOGGER = LoggerFactory.getLogger(Starboard.class);
+    public static final String STARBOARD_TABLE = "starboard";
 
     private final Map<String, String> starboardCache = new HashMap<>();
 
@@ -26,17 +31,19 @@ public class Starboard extends JavaPlugin {
         registerCommand(new StarboardCommand(this));
         registerEventListener(new EmoteEventListener(this));
         registerMigration(new SetupStarboardTableAndFieldMigration());
+
+        ScheduleHandler.registerJob(new UpdateStarJob(this));
     }
 
-    int getReactionRequirement() {
+    public int getReactionRequirement() {
         return getConfig().getInt("reaction-requirement", 3);
     }
 
-    boolean getIgnoreOwnMessages() {
+    public boolean getIgnoreOwnMessages() {
         return getConfig().getBoolean("ignore-own-messages", false);
     }
 
-    Color getColor(float percentage) {
+    public Color getColor(float percentage) {
         percentage = percentage > 1.0F ? 1.0F : percentage;
         percentage = percentage < 0.0F ? 0.05F : percentage;
 
@@ -49,7 +56,7 @@ public class Starboard extends JavaPlugin {
         );
     }
 
-    String getStarEmote(int stars) {
+    public String getStarEmote(int stars) {
         if (stars <= 5) {
             return "\u2B50";
         } else if (stars <= 10) {
@@ -60,7 +67,7 @@ public class Starboard extends JavaPlugin {
         return "\u2728";
     }
 
-    String getStarboardValueFromGuild(String guildId) {
+    public String getStarboardValueFromGuild(String guildId) {
         if (starboardCache.containsKey(guildId)) {
             return starboardCache.get(guildId);
         }
@@ -86,7 +93,7 @@ public class Starboard extends JavaPlugin {
         return null;
     }
 
-    boolean updateStarboardDatabaseValue(String guildId, String value) {
+    public boolean updateStarboardDatabaseValue(String guildId, String value) {
         try {
             getDatabase().newQueryBuilder(Constants.GUILD_TABLE_NAME)
                     .where("id", guildId)

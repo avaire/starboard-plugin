@@ -1,8 +1,9 @@
-package com.avairebot.starboard;
+package com.avairebot.starboard.migrations;
 
 import com.avairebot.Constants;
 import com.avairebot.contracts.database.migrations.Migration;
 import com.avairebot.database.schema.Schema;
+import com.avairebot.starboard.Starboard;
 
 import java.sql.SQLException;
 

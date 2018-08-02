@@ -1,9 +1,10 @@
-package com.avairebot.starboard;
+package com.avairebot.starboard.command;
 
 import com.avairebot.commands.Category;
 import com.avairebot.commands.CategoryHandler;
 import com.avairebot.commands.CommandMessage;
 import com.avairebot.contracts.commands.Command;
+import com.avairebot.starboard.Starboard;
 import com.avairebot.utilities.ComparatorUtil;
 import com.avairebot.utilities.MentionableUtil;
 import net.dv8tion.jda.core.entities.Channel;
@@ -17,7 +18,7 @@ public class StarboardCommand extends Command {
 
     private final Starboard starboard;
 
-    StarboardCommand(Starboard starboard) {
+    public StarboardCommand(Starboard starboard) {
         super(starboard, false);
 
         this.starboard = starboard;
@@ -30,7 +31,7 @@ public class StarboardCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "Sets test";
+        return "Can be used to see the current starboard channel, if an channel is mentioned, the mentioned channel will be set to the new starboard channel.";
     }
 
     @Override
