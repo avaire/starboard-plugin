@@ -4,6 +4,7 @@ import com.avairebot.commands.Category;
 import com.avairebot.commands.CategoryHandler;
 import com.avairebot.commands.CommandMessage;
 import com.avairebot.contracts.commands.Command;
+import com.avairebot.contracts.commands.CommandSource;
 import com.avairebot.starboard.Starboard;
 import com.avairebot.utilities.ComparatorUtil;
 import com.avairebot.utilities.MentionableUtil;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@CommandSource(uri = "https://github.com/avaire/starboard-plugin/blob/master/src/main/java/com/avairebot/starboard/command/StarboardCommand.java")
 public class StarboardCommand extends Command {
 
     private final Starboard starboard;
