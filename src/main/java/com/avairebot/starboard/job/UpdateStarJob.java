@@ -78,8 +78,8 @@ public class UpdateStarJob extends Job {
                     } catch (SQLException e) {
                         LOGGER.error("Failed to delete the original star reaction record with an ID of {}", messageId);
                     }
-                }, RestActionUtil.IGNORE);
-            }, RestActionUtil.IGNORE);
+                }, RestActionUtil.ignore);
+            }, RestActionUtil.ignore);
             return;
         }
 

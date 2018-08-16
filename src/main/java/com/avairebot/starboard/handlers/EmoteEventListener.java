@@ -60,6 +60,6 @@ public class EmoteEventListener extends EventListener {
             }
 
             queue.put(messageId, new StarReaction(message, starboardChannel));
-        }, RestActionUtil.IGNORE);
+        }, RestActionUtil.ignore);
     }
 }

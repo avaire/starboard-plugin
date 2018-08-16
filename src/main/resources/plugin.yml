@@ -1,6 +1,6 @@
 name: 'Starboard'
 main: 'com.avairebot.starboard.Starboard'
-version: '1.2'
+version: '1.2.1'
 author: 'Alexis Tan <Senither#0001>'
 description: 'Starboard is a simple plugin that can be used to define a starboard channel per-server, users can then react to messages using the star emoji to get messages showing up on in the starboard channel.'
-requires: '0.7.0'
+requires: '0.7.71'
