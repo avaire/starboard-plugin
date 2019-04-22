@@ -99,11 +99,11 @@ public class UpdateStarJob extends Job {
         }
 
         Message build = (new MessageBuilder())
-                .setContent(String.format("%s **%s** %s ID: %s",
+                .setContent(String.format("%s **%s** %s Jump: %s",
                         starboard.getStarEmote(emoteCount),
                         emoteCount,
                         message.getTextChannel().getAsMention(),
-                        message.getId()
+                        message.getJumpUrl()
                 ))
                 .setEmbed(embedBuilder.build())
                 .build();
