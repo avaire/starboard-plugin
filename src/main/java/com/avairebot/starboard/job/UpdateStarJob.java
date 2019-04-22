@@ -99,7 +99,7 @@ public class UpdateStarJob extends Job {
         }
 
         Message build = (new MessageBuilder())
-                .setContent(String.format("%s **%s** %s Jump: %s",
+                .setContent(String.format("%s **%s** %s [Jump!](%s)",
                         starboard.getStarEmote(emoteCount),
                         emoteCount,
                         message.getTextChannel().getAsMention(),
