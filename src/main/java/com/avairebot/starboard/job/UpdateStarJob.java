@@ -56,6 +56,7 @@ public class UpdateStarJob extends Job {
 
     private void handleReaction(Message message, TextChannel starboardChannel, long messageId) throws SQLException {
         MessageReaction reaction = getReactionFromList(message.getReactions());
+        String dynamicJumpUrl = String.format("[**Jump to original**](%s)", message.getJumpUrl());
         int emoteCount = getEmoteCount(reaction);
         if (emoteCount < starboard.getReactionRequirement()) {
             DataRow row = starboard.getDatabase()
@@ -99,13 +100,12 @@ public class UpdateStarJob extends Job {
         }
 
         Message build = (new MessageBuilder())
-                .setContent(String.format("%s **%s** %s [Jump!](%s)",
+                .setContent(String.format("%s **%s** %s",
                         starboard.getStarEmote(emoteCount),
                         emoteCount,
-                        message.getTextChannel().getAsMention(),
-                        message.getJumpUrl()
+                        message.getTextChannel().getAsMention()
                 ))
-                .setEmbed(embedBuilder.build())
+                .setEmbed(embedBuilder.setDescription(message.getContentRaw() + "\n\n" + dynamicJumpUrl).build())
                 .build();
 
         DataRow row = starboard.getDatabase()
