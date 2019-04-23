@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group 'com.avairebot'
-version '1.2.1'
+version '1.2.2'
 description 'Adds a starboard command to Ava, allowing servers to define a starboard channel'
 
 sourceCompatibility = 1.8
