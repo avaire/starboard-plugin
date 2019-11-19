@@ -1,3 +1,8 @@
+plugins {
+    // Supports Gradle v4.5 - v5.2
+    id 'com.github.jk1.tcdeps' version '0.18'
+}
+
 apply plugin: 'java'
 
 group 'com.avairebot'
@@ -8,11 +13,15 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    //
+    teamcityServer{
+        url = 'http://ci.avairebot.com'
+    }
 }
 
 dependencies {
-    // Due to jitpack not wanting to compile the sources from github,
-    // we're using the raw Jar file instead.
-    compileOnly files('./../avaire/AvaIre.jar')
+    // This is nice for local development if you want to use a custom build of Ava.
+    // compileOnly files('./AvaIre.jar')
+
+    // Version 0.9.165
+    compileOnly tc(buildTypeId: 'Avaire_Build', version: '1', artifactPath: 'AvaIre.jar')
 }
