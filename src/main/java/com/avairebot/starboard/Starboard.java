@@ -44,7 +44,7 @@ public class Starboard extends JavaPlugin {
     }
 
     public Color getColor(float percentage) {
-        percentage = percentage > 1.0F ? 1.0F : percentage;
+        percentage = Math.min(percentage, 1.0F);
         percentage = percentage < 0.0F ? 0.05F : percentage;
 
         float inverse_blending = 1 - percentage;
@@ -97,9 +97,7 @@ public class Starboard extends JavaPlugin {
         try {
             getDatabase().newQueryBuilder(Constants.GUILD_TABLE_NAME)
                     .where("id", guildId)
-                    .update(statement -> {
-                        statement.set("starboard", value);
-                    });
+                    .update(statement -> statement.set("starboard", value));
 
             starboardCache.put(guildId, value);
 

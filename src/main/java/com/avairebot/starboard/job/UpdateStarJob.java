@@ -7,11 +7,11 @@ import com.avairebot.starboard.Starboard;
 import com.avairebot.starboard.handlers.EmoteEventListener;
 import com.avairebot.starboard.handlers.StarReaction;
 import com.avairebot.utilities.RestActionUtil;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageReaction;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +69,7 @@ public class UpdateStarJob extends Job {
                 return;
             }
 
-            starboardChannel.getMessageById(row.getString("message_id")).queue(starboardMessage -> {
+            starboardChannel.retrieveMessageById(row.getString("message_id")).queue(starboardMessage -> {
                 starboardMessage.delete().queue(aVoid -> {
                     try {
                         starboard.getDatabase()
@@ -86,7 +86,7 @@ public class UpdateStarJob extends Job {
 
         EmbedBuilder embedBuilder = MessageFactory.createEmbeddedBuilder()
                 .setColor(starboard.getColor((float) emoteCount / 13))
-                .setTimestamp(message.getCreationTime())
+                .setTimestamp(message.getTimeCreated())
                 .setAuthor(message.getAuthor().getName(), null, message.getAuthor().getEffectiveAvatarUrl())
                 .setDescription(message.getContentRaw());
 
@@ -120,7 +120,7 @@ public class UpdateStarJob extends Job {
             }
             starboardChannel.sendMessage(build).queue(consumer -> createNewRecord(consumer, messageId));
         } else {
-            starboardChannel.getMessageById(row.getString("message_id")).queue(starMessage -> {
+            starboardChannel.retrieveMessageById(row.getString("message_id")).queue(starMessage -> {
                 if (emoteCount < starboard.getReactionRequirement()) {
                     starMessage.delete().queue(aVoid -> deleteMessageRecord(messageId));
 
