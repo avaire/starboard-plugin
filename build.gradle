@@ -22,6 +22,6 @@ dependencies {
     // This is nice for local development if you want to use a custom build of Ava.
     // compileOnly files('./AvaIre.jar')
 
-    // Version 0.9.165
-    compileOnly tc(buildTypeId: 'Avaire_Build', version: '1', artifactPath: 'AvaIre.jar')
+    // Version 0.10.15
+    compileOnly tc(buildTypeId: 'Avaire_Build', version: '60', artifactPath: 'AvaIre.jar')
 }
