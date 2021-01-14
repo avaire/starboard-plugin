@@ -3,11 +3,11 @@ package com.avairebot.starboard.handlers;
 import com.avairebot.contracts.handlers.EventListener;
 import com.avairebot.starboard.Starboard;
 import com.avairebot.utilities.RestActionUtil;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageReaction;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveEvent;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +54,7 @@ public class EmoteEventListener extends EventListener {
             return;
         }
 
-        messageReaction.getTextChannel().getMessageById(messageId).queue(message -> {
+        messageReaction.getTextChannel().retrieveMessageById(messageId).queue(message -> {
             if (starboard.getIgnoreOwnMessages() && message.getAuthor().getIdLong() == member.getUser().getIdLong()) {
                 return;
             }

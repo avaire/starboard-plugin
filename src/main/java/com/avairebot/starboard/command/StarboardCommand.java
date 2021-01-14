@@ -8,8 +8,8 @@ import com.avairebot.contracts.commands.CommandSource;
 import com.avairebot.starboard.Starboard;
 import com.avairebot.utilities.ComparatorUtil;
 import com.avairebot.utilities.MentionableUtil;
-import net.dv8tion.jda.core.entities.Channel;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -102,8 +102,8 @@ public class StarboardCommand extends Command {
             return sendErrorMessage(context, "Failed to update the starboard value for the server, please try again later.");
         }
 
-        Channel channel = MentionableUtil.getChannel(context.getMessage(), args);
-        if (channel == null || !(channel instanceof TextChannel)) {
+        GuildChannel channel = MentionableUtil.getChannel(context.getMessage(), args);
+        if (!(channel instanceof TextChannel)) {
             return sendErrorMessage(context, "Invalid channel mentioned, you just mention or name a valid text channel.");
         }
 
