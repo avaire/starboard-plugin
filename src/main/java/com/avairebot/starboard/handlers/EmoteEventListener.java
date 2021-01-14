@@ -3,7 +3,6 @@ package com.avairebot.starboard.handlers;
 import com.avairebot.contracts.handlers.EventListener;
 import com.avairebot.starboard.Starboard;
 import com.avairebot.utilities.RestActionUtil;
-import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageReaction;
 import net.dv8tion.jda.api.entities.TextChannel;
